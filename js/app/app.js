@@ -15,6 +15,12 @@ function loadEvents() {
     //delete cart items
     cart.addEventListener('click', deleteCourse);
 
+    //mostrar local storage
+    document.addEventListener('DOMContentLoaded', () => {
+        cartItems = JSON.parse( localStorage.getItem('cart')) || [];
+        htmlCart();
+    })
+
     emptyCartBtn.addEventListener('click', () => {
         cartItems = [];
 
@@ -93,10 +99,10 @@ function htmlCart() {
 
     //Go through the cart and generate html
     cartItems.forEach(course => {
-        const {img , title, price , quantity, id} = course;
+        const { img, title, price, quantity, id } = course;
         const row = document.createElement('tr');
         row.innerHTML =
-        `<td><img src='${img}'></td>
+            `<td><img src='${img}'></td>
         <td>${title}</td>
         <td>${price}</td>
         <td>${quantity}</td>
@@ -106,8 +112,18 @@ function htmlCart() {
         //Adding html to the cart container
         cartContainer.appendChild(row);
 
-    }) 
+    })
+    //sincronizar con storage
+    sincronizarStorage();
 }
+
+
+
+function sincronizarStorage () {
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+}
+
+
 
 function htmlClean() {
     while (cartContainer.firstChild) {
